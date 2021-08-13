@@ -1,6 +1,25 @@
-import React from "react"
+import React,{useState} from "react"
+import {url} from "./util/data"
 
-function login() {
+function Login() {
+    const [Email, setEmail] = useState("")
+	const [Password, setPassword] = useState("")
+	const submit=()=>{
+		fetch(`${url}/signin`, {
+			body:JSON.stringify({
+				email:Email,
+				password:Password
+			}),
+			method:"POST"
+		})
+		.then((res)=>res.json())
+		.then((data)=>{
+			if(data.ok){
+				console.log("signin")
+			}
+		})
+		.catch((er)=>console.log(er))
+	}
     return (
         <div className="container mx-auto">
             <div className="flex justify-center items-center h-screen px-6">
@@ -13,7 +32,10 @@ function login() {
                         <form className="px-8 pt-6 pb-8 mb-4 bg-white rounded">
                             <div className="mb-4 w-full">
                                 <label className="block text-gray-900 text-sm font-bold mb-2">Username</label>
-                                <input className=" border rounded border-black w-full py-4 px-3 text-gray-900 bg-white"
+                                <input
+                                onChange={(e)=>setEmail(e.target.value)}
+								value={Email}
+                                className=" border rounded border-black w-full py-4 px-3 text-gray-900 bg-white"
                                     id="username" type="text" placeholder="Username"/>
 						    </div>
 
@@ -21,11 +43,15 @@ function login() {
                                 <label className="block text-gray-900 text-sm font-bold mb-2">
                                     Password
                                 </label>
-                                <input className="border rounded border-black w-full py-4 px-3 text-gray-900 mb-3" id="password"
+                                <input 
+                                onChange={(e)=>setPassword(e.target.value)}
+                                value={Password}
+                                className="border rounded border-black w-full py-4 px-3 text-gray-900 mb-3" id="password"
                                     type="password" placeholder="Password"/>
                             </div>
                             <div className="mb-6 text-center">
                                 <button
+                                onClick={()=>submit()}
                                     className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                                     type="button">
                                     Sign In
@@ -51,4 +77,4 @@ function login() {
     );
 }
 
-export default login;
+export default Login;

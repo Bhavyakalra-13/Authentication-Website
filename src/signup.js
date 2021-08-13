@@ -1,6 +1,25 @@
-import React from "react"
+import React,{useState} from "react"
+import {url} from "./util/data"
 
-function signup(){
+function Signup(){
+	const [Email, setEmail] = useState("")
+	const [Password, setPassword] = useState("")
+	const submit=()=>{
+		fetch(`${url}/signup`, {
+			body:JSON.stringify({
+				email:Email,
+				password:Password
+			}),
+			method:"POST"
+		})
+		.then((res)=>res.json())
+		.then((data)=>{
+			if(data.ok){
+				console.log("signup")
+			}
+		})
+		.catch((er)=>console.log(er))
+	}
     return(
         <div className="container mx-auto">
 			<div className="flex justify-center items-center h-screen px-6">
@@ -43,6 +62,8 @@ function signup(){
 									Email
 								</label>
 								<input
+								onChange={(e)=>setEmail(e.target.value)}
+								value={Email}
 									className="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
 									id="email"
 									type="email"
@@ -55,6 +76,8 @@ function signup(){
 										Password
 									</label>
 									<input
+									onChange={(e)=>setPassword(e.target.value)}
+									value={Password}
 										className="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border border-red-500 rounded shadow appearance-none focus:outline-none focus:shadow-outline"
 										id="password"
 										type="password"
@@ -76,6 +99,7 @@ function signup(){
 							</div>
 							<div className="mb-6 text-center">
 								<button
+								onClick={()=>submit()}
 									className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
 									type="button"
 								>
@@ -99,4 +123,4 @@ function signup(){
     );
 }
 
-export default signup;
+export default Signup;
